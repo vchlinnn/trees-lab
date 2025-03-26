@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.trees;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,21 +85,62 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      * @return the elements of this tree collected via an in-order traversal
      */
     public List<T> toListInorder() {
-        throw new UnsupportedOperationException();
+        List<T> treeList = new ArrayList<>();
+        listIOH(treeList, root);
+        return treeList;
     }
 
+
+    private void listIOH(List<T> treeList, Node<T> root){
+        if (root == null) {
+            return;
+        } else {
+            listIOH(treeList, root.left);
+            treeList.add(root.value);
+            listIOH(treeList, root.right);
+            return;
+        }
+    }
     /**
      * @return the elements of this tree collected via a pre-order traversal
      */
     public List<T> toListPreorder() {
-        throw new UnsupportedOperationException();
+        List<T> treeList = new ArrayList<>();
+        listH(treeList, root);
+        return treeList;
+    }
+    
+
+
+    private void listH(List<T> treeList, Node<T> root){
+        if (root == null) {
+            return;
+        } else {
+            treeList.add(root.value);
+            listH(treeList, root.left);
+            listH(treeList, root.right);
+            return;
+        }
     }
 
     /**
      * @return the elements of this tree collected via a post-order traversal
      */
     public List<T> toListPostorder() {
-        throw new UnsupportedOperationException();
+        List<T> treeList = new ArrayList<>();
+        listPOH(treeList, root);
+        return treeList;
+    }
+
+    private void listPOH(List<T> treeList, Node<T> root){
+        if (root == null) {
+            return;
+        } else {
+            listPOH(treeList, root.left);
+            listPOH(treeList, root.right);
+            treeList.add(root.value);
+            return;
+        }
     }
 
     ///// Part 2: Contains
@@ -139,4 +181,5 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
     public void delete(T value) {
         throw new UnsupportedOperationException();
     }
+
 }
