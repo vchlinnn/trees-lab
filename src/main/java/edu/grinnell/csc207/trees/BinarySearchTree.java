@@ -13,7 +13,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
     /**
      * A node of the binary search tree.
      */
-    private static class Node<T> {
+    private static class Node<T extends Comparable<? super T>> {
         T value;
         Node<T> left;
         Node<T> right;
@@ -150,7 +150,19 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      * @return true iff the tree contains <code>value</code>
      */
     public boolean contains(T value) {
-        throw new UnsupportedOperationException();
+        Node<T> searchnode = this.root;
+        for (;searchnode != null;){
+            if (searchnode.value.compareTo(value) == 0){
+                return true;
+            }
+            if ((searchnode.value).compareTo(value) > 0){
+                searchnode = searchnode.left;
+            }
+            else{
+                searchnode = searchnode.right;
+            }
+        }
+        return false;
     }
 
     ///// Part 3: Pretty Printing
@@ -160,7 +172,17 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      *         form: "[v0, v1, ..., vn]"
      */
     public String toStringPreorder() {
-        throw new UnsupportedOperationException();
+        List treelist = toListPreorder();
+        StringBuffer buf = new StringBuffer("[");
+        if (treelist.size() > 0) {
+            buf.append(treelist.get(0));
+            for (int i = 1; i < treelist.size(); i++) {
+                buf.append(", ");
+                buf.append(treelist.get(i));
+            }
+        }
+        buf.append("]");
+        return buf.toString();
     }
 
     ///// Part 4: Deletion
@@ -179,7 +201,57 @@ public class BinarySearchTree<T extends Comparable<? super T>> {
      * @param value the value to delete
      */
     public void delete(T value) {
-        throw new UnsupportedOperationException();
+        Node<T> deleteNode = this.root;
+        Node<T> parentNode = this.root;
+        boolean direction = true; // left: true, right: false
+        for (;deleteNode != null;){
+            if (deleteNode.value.compareTo(value) == 0){
+                break;
+            }
+            if ((deleteNode.value).compareTo(value) > 0){
+                parentNode = deleteNode;
+                deleteNode = deleteNode.left;
+                direction = true;
+            }
+            else {
+                parentNode = deleteNode;
+                deleteNode = deleteNode.right;
+                direction = false;
+            }
+        }
+
+
+        Node<T> leftPart = deleteNode.left;
+        Node<T> rightPart = deleteNode.right;
+
+        if (leftPart == null) {
+            if (direction == true) {
+                parentNode.left = rightPart;
+            } else {
+                parentNode.right = rightPart;
+            }
+            return;
+        } else if (rightPart == null) {
+            if (direction == true) {
+                parentNode.left = leftPart;
+            } else {
+                parentNode.right = leftPart;
+            }
+            return;
+        }
+
+        if (direction == true) {
+            parentNode.left = leftPart;
+        } else {
+            parentNode.right = leftPart;
+        }
+
+        Node<T> currNode = leftPart;
+
+        for (;currNode.right != null;){
+            currNode = currNode.right;
+        }
+        currNode.right = rightPart;
     }
 
 }
